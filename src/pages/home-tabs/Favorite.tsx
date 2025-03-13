@@ -11,7 +11,8 @@ import {
   IonLabel,
   IonIcon,
   IonAccordion,
-  IonAccordionGroup
+  IonAccordionGroup,
+  IonSpinner
 } from '@ionic/react';
 import { star } from 'ionicons/icons';
 

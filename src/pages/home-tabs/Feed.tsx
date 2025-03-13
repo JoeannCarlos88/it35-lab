@@ -11,7 +11,9 @@ import {
   IonLabel,
   IonIcon,
   IonAccordion,
-  IonAccordionGroup
+  IonAccordionGroup,
+  IonAlert, IonButton,
+  IonActionSheet,
 } from '@ionic/react';
 import { star } from 'ionicons/icons';
 
@@ -49,6 +51,43 @@ const Feed: React.FC = () => {
               </IonAccordion>
             ))}
           </IonAccordionGroup>
+          <IonButton id="present-alert">Click Me</IonButton>
+      <IonAlert
+        trigger="present-alert"
+        header="A Short Title Is Best"
+        subHeader="A Sub Header Is Optional"
+        message="A message should be a short, complete sentence."
+        buttons={['Action']}
+      ></IonAlert>
+      <>
+      <IonButton id="open-action-sheet">Open</IonButton>
+      <IonActionSheet
+        trigger="open-action-sheet"
+        header="Actions"
+        buttons={[
+          {
+            text: 'Delete',
+            role: 'destructive',
+            data: {
+              action: 'delete',
+            },
+          },
+          {
+            text: 'Share',
+            data: {
+              action: 'share',
+            },
+          },
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            data: {
+              action: 'cancel',
+            },
+          },
+        ]}
+      ></IonActionSheet>
+    </>
         </IonList>
       </IonContent>
     </IonPage>
