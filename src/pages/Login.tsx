@@ -12,7 +12,6 @@ import {
 } from '@ionic/react';
 import { logoIonic } from 'ionicons/icons';
 import { useState } from 'react';
-// Removed: import { supabase } from '../utils/supabaseClient';
 
 const AlertBox: React.FC<{ message: string; isOpen: boolean; onClose: () => void }> = ({ message, isOpen, onClose }) => {
   return (
