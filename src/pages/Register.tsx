@@ -16,6 +16,7 @@ import {
   IonAlert,
 } from '@ionic/react';
 import bcrypt from 'bcryptjs';
+import { supabase } from '../utils/supabaseClient'
 
 // Reusable Alert Component
 const AlertBox: React.FC<{ message: string; isOpen: boolean; onClose: () => void }> = ({ message, isOpen, onClose }) => {
@@ -42,59 +43,64 @@ const Register: React.FC = () => {
   const [alertMessage, setAlertMessage] = useState('');
   const [showAlert, setShowAlert] = useState(false);
 
+  
   const handleOpenVerificationModal = () => {
     if (!email.endsWith("@nbsc.edu.ph")) {
-      setAlertMessage("Only @nbsc.edu.ph emails are allowed to register.");
-      setShowAlert(true);
-      return;
+        setAlertMessage("Only @nbsc.edu.ph emails are allowed to register.");
+        setShowAlert(true);
+        return;
     }
 
     if (password !== confirmPassword) {
-      setAlertMessage("Passwords do not match.");
-      setShowAlert(true);
-      return;
+        setAlertMessage("Passwords do not match.");
+        setShowAlert(true);
+        return;
     }
 
     setShowVerificationModal(true);
-  };
+};
 
-  const doRegister = async () => {
+const doRegister = async () => {
     setShowVerificationModal(false);
 
     try {
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(password, salt);
+        // Sign up in Supabase authentication
+        const { data, error } = await supabase.auth.signUp({ email, password });
 
-      const response = await fetch('/your-api/register.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username,
-          email,
-          firstName,
-          lastName,
-          password: hashedPassword,
-        }),
-      });
+        if (error) {
+            throw new Error("Account creation failed: " + error.message);
+        }
 
-      const data = await response.json();
+        // Hash password before storing in the database
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
 
-      if (!response.ok) {
-        throw new Error(data.message || 'Registration failed');
-      }
+        // Insert user data into 'users' table
+        const { error: insertError } = await supabase.from("users").insert([
+            {
+                username,
+                user_email: email,
+                user_firstname: firstName,
+                user_lastname: lastName,
+                user_password: hashedPassword,
+            },
+        ]);
 
-      setShowSuccessModal(true);
+        if (insertError) {
+            throw new Error("Failed to save user data: " + insertError.message);
+        }
+
+        setShowSuccessModal(true);
     } catch (err) {
-      if (err instanceof Error) {
-        setAlertMessage(err.message);
-      } else {
-        setAlertMessage("An unknown error occurred.");
-      }
-      setShowAlert(true);
+        // Ensure err is treated as an Error instance
+        if (err instanceof Error) {
+            setAlertMessage(err.message);
+        } else {
+            setAlertMessage("An unknown error occurred.");
+        }
+        setShowAlert(true);
     }
-  };
+};
 
   return (
     <IonPage>
