@@ -1,17 +1,11 @@
-
-import {
+import { 
   IonButtons,
-  IonContent,
-  IonHeader,
-  IonMenuButton,
-  IonPage,
-  IonTitle,
-  IonToolbar,
-  IonCard,
-  IonCardHeader,
-  IonCardTitle,
-  IonCardContent,
-  IonText
+    IonContent, 
+    IonHeader, 
+    IonMenuButton, 
+    IonPage, 
+    IonTitle, 
+    IonToolbar 
 } from '@ionic/react';
 import FeedContainer from '../../components/FeedContainer';
 
@@ -19,29 +13,18 @@ const Feed: React.FC = () => {
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar color="dark">
-          <IonButtons slot="start">
-            <IonMenuButton />
-           </IonButtons>
+        <IonToolbar>
+          <IonButtons slot='start'>
+            <IonMenuButton></IonMenuButton>
+          </IonButtons>
+          <IonTitle>Feed</IonTitle>
         </IonToolbar>
       </IonHeader>
-
-      <IonContent fullscreen color="blue">
-        <div style={{ padding: '16px' }}>
-          <IonCard className="ion-activatable ripple-parent">
-            <IonCardHeader>
-              <IonCardTitle>Welcome to your feed</IonCardTitle>
-            </IonCardHeader>
-            <IonCardContent>
-              
-            </IonCardContent>
-          </IonCard>
-
-          <FeedContainer />
-        </div>
+      <IonContent fullscreen>
+        <FeedContainer />
       </IonContent>
     </IonPage>
   );
 };
 
-export default Feed;
+export default Feed; 
